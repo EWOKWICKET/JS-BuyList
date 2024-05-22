@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-	<head lang="uk">
+	<head lang="en">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, intial-scale=1.0">
 		<title>Buy list</title>
@@ -11,31 +11,57 @@
 
 	<body>
 		<div class="box">
-			<!-- <div class="panel">
-
-			</div> -->
-
-			<div class="panel">
-				<h1 class="title">Left</h1>
-				<div>
-					<span class="product-item">
-						Apple <span class="amount">5</span>
-					</span>
-
-					<span class="product-item">
-						Orange <span class="amount">3</span>
-					</span>
-	
-					<span class="product-item">
-						Pineapple <span class="amount">2</span>
-					</span>
-					
+			<div class="panel product-controller-panel">
+				<div class="product-add-container">
+					<form class="product-add">
+						<input type="text" placeholder="Product name">
+						<button class="default product-add" type="button">Add</button>
+					</form>
 				</div>
-				<h1 class="title">Bought</h1>
-				<div>
-					<span class="product-item">
-						Pear <span class="amount">4</span>
+				<hr>
+				<div class="product-controller">
+					<h3>Apple</h3>
+					<span class="amount-controller">
+						<button class="default decrement">-</button>
+						<span class="chosen-amount">test</span>
+						<button class="default increment">+</button>
 					</span>
+					<span class="product-state">test</span>
+				</div>
+				<hr>
+				<div class="product-controller">
+					<h3>Orange</h3>
+					<span class="amount-controller">
+						<button class="default decrement">-</button>
+						<span class="chosen-amount">test</span>
+						<button class="default increment">+</button>
+					</span>
+					<span class="product-state">test</span>
+				</div>
+				<hr>
+				<div class="product-controller">
+					<h3>Pineapple</h3>
+					<span class="amount-controller">
+						<button class="default decrement">-</button>
+						<span class="chosen-amount">test</span>
+						<button class="default increment">+</button>
+					</span>
+					<span class="product-state">test</span>
+				</div>
+			</div>
+
+			<div class="panel product-list-panel">
+				<h2>Left</h2>
+				<hr>
+				<div class="item-container">
+					<span class="product-item">Apple <span class="amount">5</span></span>
+					<span class="product-item">Orange <span class="amount">3</span></span>
+					<span class="product-item">Pineapple <span class="amount">2</span></span>
+				</div>
+				<h2>Bought</h2>
+				<hr>
+				<div class="item-container">
+					<span class="product-item bought-item">Pear <span class="amount bought-item">3</span></span>
 				</div>
 
 			</div>
