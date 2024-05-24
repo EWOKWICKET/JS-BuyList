@@ -14,33 +14,33 @@
 			<div class="panel">
 				<form class="product-input-container">
 					<input class="product-input" type="text" placeholder="Product name">
-					<button class="default product-add" type="button">Add</button>
+					<button class="default product-add" type="button" data-tooltip="Add to cart">Add</button>
 				</form>
 				<span><hr></span>
 				<div class="product-controller-container">
 					<div class="product-controller">
 						<h3 class="product-title">Apple</h3>
 						<span class="amount-controller">
-							<button class="default decrement">-</button>
+							<button class="default decrement" data-tooltip="One less">-</button>
 							<span class="chosen-amount">4</span>
-							<button class="default increment">+</button>
+							<button class="default increment" data-tooltip="One more">+</button>
 						</span>
 						<span class="product-action-container">
 							<div class="state">Bought</div>
-							<button class="default delete">⨯</button>
+							<button class="default delete" data-tooltip="Delete from cart">⨯</button>
 						</span>
 					</div>
 					<span><hr></span>
 					<div class="product-controller">	
 						<h3 class="product-title">Orange</h3>
 						<span class="amount-controller">
-							<button class="default decrement">-</button>
+							<button class="default decrement" data-tooltip="One less">-</button>
 							<span class="chosen-amount">1</span>
-							<button class="default increment">+</button>
+							<button class="default increment" data-tooltip="One more">+</button>
 						</span>
 						<span class="product-action-container">
 							<div class="state">Bought</div>
-							<button class="default delete">⨯</button>
+							<button class="default delete" data-tooltip="Delete from cart">⨯</button>
 						</span>
 					</div>
 					<span><hr></span>
@@ -57,18 +57,17 @@
 			</div>
 
 			<div class="panel product-list-panel">
-				<h2>Left</h2>
+				<h2 class="category">In stock</h2>
 				<hr>
 				<div class="item-container">
 					<span class="product-item">Apple <span class="amount">5</span></span>
 					<span class="product-item">Orange <span class="amount">3</span></span>
 				</div>
-				<h2>Bought</h2>
+				<h2 class="category">Bought</h2>
 				<hr>
 				<div class="item-container">
 					<span class="product-item bought-item">Pineapple <span class="amount bought-item">2</span></span>
 				</div>
-
 			</div>
 			<button class="badge">Buy List</button>
 		</div>

@@ -15,13 +15,13 @@ html {
 
 body {	
 	height: 100%;	
+	margin: 0;
 	font: Verdana, var(--normal-font-size);
 	font-size: var(--normal-font-size);
 	color: black;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 0;
 	
 }
 
@@ -56,7 +56,6 @@ body {
 	box-shadow: 0 4px 8px black;
 	margin: 15px;
 	box-sizing: border-box;
-	overflow: auto;
 }
 
 .product-list-panel {
@@ -125,7 +124,6 @@ hr {
 
 .product-title {
 	width: 30%;	
-	height: 100%;	
 	font-size: calc(var(--normal-font-size) + 10px);
 	font-weight: lighter;
 	margin: 5px;
@@ -161,6 +159,7 @@ hr {
 }
 
 .product-action-container {
+	position: relative;
 	height: 100%;
 	width: 30%;
 	padding: 3px;
@@ -192,7 +191,7 @@ hr {
 
 /* PRODUCT-LIST-PANEL */
 
-h2 {
+.category {
 	width: 100%;
 	padding: 1px 10px;
 	margin: 1px 0;
@@ -201,6 +200,7 @@ h2 {
 }
 
 .item-container {
+	position: relative;
     height: 40%;
 	width: 100%;	
 	padding: 1px 10px;
@@ -209,6 +209,7 @@ h2 {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: left;
+	align-items: center;
 	overflow: auto;
 	box-sizing: border-box;
 }
@@ -379,6 +380,35 @@ button.delete:hover {
 button.delete:active {
 	box-shadow: none;
 	background-color: darkred;
+}
+
+/* TOOLTIP */
+
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {	
+    content: attr(data-tooltip);
+    position: fixed;
+    left: 50%;
+	bottom: calc(100% + 5px);
+	padding: 3px 5px;
+    border-radius: 25px;
+	font-size: 10px;
+	white-space: nowrap;
+    background-color: #8a2be2; 
+    color: white; 
+    opacity: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transform: translateX(-50%) scale(0);
+    transform-origin: bottom;
+    transition: all 0.5s ease;
+}
+
+[data-tooltip]:hover::after {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
 }
 
 /* MEDIA */
