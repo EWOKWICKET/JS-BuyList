@@ -267,7 +267,7 @@ button.badge::after {
 
 button.badge:hover {
 	height: calc(1.4 * var(--badge-height));;
-	/* border-color: var(--new-badge-color); */
+	border-color: var(--new-badge-color);
 	background-color: var(--new-badge-color);
 }
 
@@ -418,13 +418,7 @@ button.delete:active {
         flex-direction: column; 
     }	
 
-	.product-item {
-		height: 25px;
-		font-size: calc(var(--normal-font-size));
-	}
-	
-	.amount {
-		height: 25px;
-		width: 25px;
+	.product-list-panel {
+		width: 900px;
 	}
 }
