@@ -17,44 +17,32 @@ async function increase(button) {
     }
 }
 
-async function badgeAction(badge) {
-    badgeClicked(badge);
+async function buyProduct(button) {
+    const product = button.closest('.product-controller');
+    
+    const chosen_amount = product.querySelector('.chosen-amount');
+    if (chosen_amount.innerHTML == 0) {
+        return;
+    }
 
-    const products = document.querySelectorAll('.product-controller');
+    const product_name = product.getAttribute('name');
 
-    products.forEach(async (product) => {
-        if (product.dataset.bought === 'false') {
-            const product_name = product.getAttribute('name');
+    const element_in_stock = document.querySelector('.item-container').querySelector(`[name=${product_name}]`);
+    const amount_in_stock = element_in_stock.querySelector('.amount');
+    const newAmount = amount_in_stock.innerHTML - chosen_amount.innerHTML;
 
-            const chosen_amount = product.querySelector('.chosen-amount');
-            if (chosen_amount.innerHTML == 0) {
-                return;
-            }
-            const element_in_stock = document.querySelector('.item-container').querySelector(`[name=${product_name}]`);
-            const amount_in_stock = element_in_stock.querySelector('.amount');
-            const newAmount = amount_in_stock.innerHTML - chosen_amount.innerHTML;
-            await updateBoughtItem(product_name, chosen_amount.innerHTML);
-            if (newAmount > 0) {
-                amount_in_stock.innerHTML = newAmount;
-                chosen_amount.innerHTML = 0;
-            } else {
-                element_in_stock.remove();
-                product.remove();
-            }
-        }
-    });
+    await updateItemsOnBuy(product_name, chosen_amount.innerHTML);
+    if (newAmount > 0) {
+        amount_in_stock.innerHTML = newAmount;
+        chosen_amount.innerHTML = 0;
+    } else {
+        element_in_stock.remove();
+    }
+
+    product.remove();
 }
 
-async function badgeClicked(badge) {
-    badge.style.backgroundColor = 'white';
-    badge.style.color = 'black';
-    setTimeout(() => {
-        badge.style.backgroundColor = 'darkorchid';
-        badge.style.color = 'white';
-    }, 300);
-}
-
-async function updateBoughtItem(name, chosen_amount) {
+async function updateItemsOnBuy(name, chosen_amount) {
     const item_container = document.querySelector('.item-container.bought-item').querySelector(`[name=${name}]`);
     if (item_container) {
         item_container.querySelector('.amount').innerHTML -= -1 * chosen_amount;
@@ -62,15 +50,32 @@ async function updateBoughtItem(name, chosen_amount) {
         createBoughtItem(name, chosen_amount);
     }
 
-    const bought_item = document.querySelectorAll('.product-controller.bought-item');
-
-    for (item of bought_item) {
-        if (item.getAttribute('name') == name) {
-            item.querySelector('.chosen-amount').innerHTML -= -1 * chosen_amount
-            return;
-        }
-    } 
     createBoughtProductController(name, chosen_amount);
+}
+
+async function returnProduct(button) {
+    const product = button.closest('.product-controller');
+
+    const chosen_amount = product.querySelector('.chosen-amount').innerHTML;
+    const product_name = product.getAttribute('name');
+
+    product.remove();
+    updateItemsOnReturn(product_name, chosen_amount);
+}
+
+async function updateItemsOnReturn(product_name, chosen_amount) {
+    createNotBoughtProductController(product_name, chosen_amount);
+    
+    const item_container_bought = document.querySelector('.item-container.bought-item').querySelector(`[name=${product_name}]`);
+    const item_container_in_stock = document.querySelector('.item-container').querySelector(`[name=${product_name}]`)
+
+    if (item_container_in_stock) {
+        item_container_in_stock.querySelector('.amount').innerHTML -= -1 * chosen_amount;
+    } else {
+        createNotBoughtItem(product_name, chosen_amount);
+    }
+
+    item_container_bought.remove();
 }
 
 async function deleteItem(item) {
@@ -85,18 +90,25 @@ async function addToCart() {
     }
 }
 
-async function createBoughtItem(name, chosen_amount) {
+async function createBoughtItem(name, amount) {
+    const itemContainer = document.querySelector('.item-container.bought-item');
+    itemContainer.append(await createItemContainer(name, amount));
+}
+
+async function createNotBoughtItem(name, amount) {
+    const itemContainer = document.querySelector('.item-container');
+    itemContainer.append(await createItemContainer(name, amount));
+}
+
+async function createItemContainer(name, amount) {
     const product_item = document.createElement('span');
     product_item.className = 'product-item';
     product_item.setAttribute('name', name)
-    product_item.innerHTML = `${_capitalizeFirstLetter(name)} <span class="amount">${chosen_amount}</span>`;
-
-    const itemContainer = document.querySelector('.item-container.bought-item');
-
-    itemContainer.appendChild(product_item);
+    product_item.innerHTML = `${_capitalizeFirstLetter(name)} <span class="amount">${amount}</span>`;
+    return product_item;
 }
 
-function createNotBoughtProductController(product_name) {
+function createNotBoughtProductController(product_name, chosen_amount=1) {
     const productController = document.createElement('div');
     productController.className = 'product-controller';
     productController.setAttribute('name', product_name);
@@ -105,11 +117,11 @@ function createNotBoughtProductController(product_name) {
             <h3 class="product-title">${_capitalizeFirstLetter(product_name)}</h3>
             <span class="amount-controller">
                 <button class="default decrement" data-tooltip="One less" onclick="decrease(this)">-</button>
-                <span class="chosen-amount">0</span>
+                <span class="chosen-amount">${chosen_amount}</span>
                 <button class="default increment" data-tooltip="One more" onclick="increase(this)">+</button>
             </span>
             <span class="product-action-container">
-                <div class="state">Not bought</div>
+                <button class="default state" onclick="buyProduct(this)">Buy</button>
                 <button class="default delete" data-tooltip="Delete from cart" onclick="deleteItem(this)">⨯</button>
             </span>
         `;
@@ -130,7 +142,7 @@ function createBoughtProductController(product_name, chosen_amount) {
                 <span class="chosen-amount">${chosen_amount}</span>
             </span>
             <span class="product-action-container">
-                <div class="state">Bought</div>
+                <button class="default state" onclick="returnProduct(this)">Return</button>
             </span>
         `;
 
