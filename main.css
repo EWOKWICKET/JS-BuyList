@@ -133,6 +133,16 @@ hr {
     align-items: center;	
     justify-content: left;
 	box-sizing: border-box;
+	overflow: auto;
+}
+
+.product-rename-input {
+	width: 30%;
+    font-size: calc(var(--normal-font-size) + 10px); 
+	font-weight: lighter;
+	margin: 5px;
+	padding: 3px;
+	box-sizing: border-box;
 }
 
 .amount-controller {
@@ -248,6 +258,7 @@ button.badge {
 
 button.badge::before {
 	content: "Buy List";
+	/* opacity: 1; */
 	display: block;
 	/* font-size: 10px; */
 	transition: all 1s ease;
@@ -272,6 +283,22 @@ button.badge:hover::after {
 	opacity: 1;
 }
 
+button.badge:focus {
+	background-color: white;
+	color: black;
+}
+
+button.badge:focus::before {
+	content: "";
+	opacity: 0;
+}
+
+button.badge:focus::after {
+	content: "Created by: \A Hushchin Ivan";
+	opacity: 1;
+}
+
+
 button.default {
 	padding: 3px;
 	margin: 5px;
@@ -294,6 +321,11 @@ button.default:hover {
 
 button.default:active {
     transform: translateY(3px);
+}
+
+button.default:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; 
 }
 
 button.product-add {

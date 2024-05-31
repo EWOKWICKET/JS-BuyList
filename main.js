@@ -4,6 +4,7 @@ async function decrease(button) {
     if (amount.innerHTML > 0) {
         amount.innerHTML--;
     }
+    updateButtons(button.parentElement);
 }
 
 async function increase(button) {
@@ -15,11 +16,21 @@ async function increase(button) {
     if (amount.innerHTML < amount_in_stock.innerHTML) {
         amount.innerHTML++;
     }
+    updateButtons(button.parentElement, amount_in_stock.innerHTML);
+}
+
+async function updateButtons(amountController, amountInStock = -1) {
+    const decrementButton = amountController.querySelector('.decrement');
+    const incrementButton = amountController.querySelector('.increment');
+    const amount = amountController.querySelector('.chosen-amount').innerHTML;
+
+    decrementButton.disabled = (amount == 0);
+    incrementButton.disabled = (amount == amountInStock);
 }
 
 async function buyProduct(button) {
     const product = button.closest('.product-controller');
-    
+
     const chosen_amount = product.querySelector('.chosen-amount');
     if (chosen_amount.innerHTML == 0) {
         return;
@@ -65,7 +76,7 @@ async function returnProduct(button) {
 
 async function updateItemsOnReturn(product_name, chosen_amount) {
     createNotBoughtProductController(product_name, chosen_amount);
-    
+
     const item_container_bought = document.querySelector('.item-container.bought-item').querySelector(`[name=${product_name}]`);
     const item_container_in_stock = document.querySelector('.item-container').querySelector(`[name=${product_name}]`)
 
@@ -82,12 +93,17 @@ async function deleteItem(item) {
     item.closest('.product-controller').remove();
 }
 
-async function addToCart() {
-    const product_name = document.querySelector('.product-input').value.trim().toLowerCase();
+async function addToCart(event) {
+    event.preventDefault();
+    const input = document.querySelector('.product-input');
+    const product_name = input.value.trim().toLowerCase();
 
     if (product_name && document.querySelector('.item-container').querySelector(`[name=${product_name}]`) && !document.querySelector('.product-controller-container').querySelector(`[name=${product_name}]`)) {
-        createNotBoughtProductController(product_name)
+        createNotBoughtProductController(product_name);
+        input.value = '';
     }
+
+    input.focus();
 }
 
 async function createBoughtItem(name, amount) {
@@ -104,24 +120,24 @@ async function createItemContainer(name, amount) {
     const product_item = document.createElement('span');
     product_item.className = 'product-item';
     product_item.setAttribute('name', name)
-    product_item.innerHTML = `${_capitalizeFirstLetter(name)} <span class="amount">${amount}</span>`;
+    product_item.innerHTML = `${capitalizeFirstLetter(name)} <span class="amount">${amount}</span>`;
     return product_item;
 }
 
-function createNotBoughtProductController(product_name, chosen_amount=1) {
+function createNotBoughtProductController(product_name, chosen_amount = 1) {
     const productController = document.createElement('div');
     productController.className = 'product-controller';
     productController.setAttribute('name', product_name);
     productController.setAttribute('data-bought', 'false');
     productController.innerHTML = `
-            <h3 class="product-title">${_capitalizeFirstLetter(product_name)}</h3>
+            <h3 class="product-title" onclick="rename(this)">${capitalizeFirstLetter(product_name)}</h3>
             <span class="amount-controller">
                 <button class="default decrement" data-tooltip="One less" onclick="decrease(this)">-</button>
                 <span class="chosen-amount">${chosen_amount}</span>
                 <button class="default increment" data-tooltip="One more" onclick="increase(this)">+</button>
             </span>
             <span class="product-action-container">
-                <button class="default state" onclick="buyProduct(this)">Buy</button>
+                <button class="default state" data-tooltip="Add to cart" onclick="buyProduct(this)">Buy</button>
                 <button class="default delete" data-tooltip="Delete from cart" onclick="deleteItem(this)">⨯</button>
             </span>
         `;
@@ -137,12 +153,12 @@ function createBoughtProductController(product_name, chosen_amount) {
     productController.setAttribute('name', product_name);
     productController.setAttribute('data-bought', 'true');
     productController.innerHTML = `
-            <h3 class="product-title">${_capitalizeFirstLetter(product_name)}</h3>
+            <h3 class="product-title">${capitalizeFirstLetter(product_name)}</h3>
             <span class="amount-controller">
                 <span class="chosen-amount">${chosen_amount}</span>
             </span>
             <span class="product-action-container">
-                <button class="default state" onclick="returnProduct(this)">Return</button>
+                <button class="default state" data-tooltip="Refund product" onclick="returnProduct(this)">Return</button>
             </span>
         `;
 
@@ -151,6 +167,42 @@ function createBoughtProductController(product_name, chosen_amount) {
     product_controller_container.appendChild(productController);
 }
 
-function _capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+async function rename(title) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'product-rename-input';
+    input.value = title.innerText;
+
+    input.addEventListener('blur', () => {
+        const newTitle = document.createElement('h3');
+        newTitle.className = 'product-title';
+        newTitle.textContent = capitalizeFirstLetter(input.value);
+        newTitle.setAttribute('onclick', "rename(this)");
+
+        const oldName = input.parentElement.getAttribute('name');
+        const newName = input.value.toLowerCase();
+
+        input.replaceWith(newTitle);
+        renameAllOccurrences(oldName, newName);
+    });
+
+    title.replaceWith(input);
+    input.focus();
+}
+
+async function renameAllOccurrences(oldName, newName) {
+    const occurrences = document.querySelectorAll(`[name=${oldName}]`);
+    occurrences.forEach((occurrence) => {
+        occurrence.setAttribute('name', newName);
+
+        if (occurrence.className == 'product-controller') {
+            occurrence.querySelector('.product-title').textContent = capitalizeFirstLetter(newName);
+        } else {
+            occurrence.innerHTML = occurrence.innerHTML.replace(new RegExp(oldName, 'i'), capitalizeFirstLetter(newName));
+        }
+    });
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.toLowerCase().slice(1);
 }

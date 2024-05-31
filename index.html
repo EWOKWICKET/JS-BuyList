@@ -13,46 +13,46 @@
 	<body>
 		<div class="box">
 			<div class="panel">
-				<form class="product-input-container" onsubmit="addToCart()">
+				<form class="product-input-container" onsubmit="addToCart(event	)">
 					<input class="product-input" type="text" placeholder="Product name" autocomplete="off">
-					<button class="default product-add" type="button" data-tooltip="Add to cart" onclick="addToCart()">Add</button>
+					<button class="default product-add" type="submit" data-tooltip="Add to cart">Add</button>
 				</form>
 				<hr>
 
 				<div class="product-controller-container">
 					<div class="product-controller" name="apple">
-						<h3 class="product-title">Apple</h3>
+						<h3 class="product-title" onclick="rename(this)">Apple</h3>
 						<span class="amount-controller">
 							<button class="default decrement" data-tooltip="One less" onclick="decrease(this)">-</button>
 							<span class="chosen-amount">4</span>
 							<button class="default increment" data-tooltip="One more" onclick="increase(this)">+</button>
 						</span>
 						<div class="product-action-container">
-							<button class="default state" onclick="buyProduct(this)">Buy</button>
+							<button class="default state" data-tooltip="Add to cart" onclick="buyProduct(this)">Buy</button>
 							<button class="default delete" data-tooltip="Delete from cart" onclick="deleteItem(this)">⨯</button>
 						</div>
 					</div>
 
 					<div class="product-controller" name="orange">	
-						<h3 class="product-title">Orange</h3>
+						<h3 class="product-title" onclick="rename(this)">Orange</h3>
 						<span class="amount-controller">
 							<button class="default decrement" data-tooltip="One less" onclick="decrease(this)">-</button>
 							<span class="chosen-amount">1</span>
 							<button class="default increment" data-tooltip="One more" onclick="increase(this)">+</button>
 						</span>
 						<div class="product-action-container">
-							<button class="default state" onclick="buyProduct(this)">Buy</button>
+							<button class="default state" data-tooltip="Add to cart" onclick="buyProduct(this)">Buy</button>
 							<button class="default delete" data-tooltip="Delete from cart" onclick="deleteItem(this)">⨯</button>
 						</div>
 					</div>
 
-					<div class="product-controller  bought-item" name="pineapple">
+					<div class="product-controller bought-item" name="pineapple">
 						<h3 class="product-title">Pineapple</h3>
 						<span class="amount-controller">
 							<span class="chosen-amount">2</span>
 						</span>
 						<div class="product-action-container">
-							<button class="default state" onclick="returnProduct(this)">Return</button>
+							<button class="default state" data-tooltip="Refund product" onclick="returnProduct(this)">Return</button>
 						</div>
 					</div>
 				</div>
